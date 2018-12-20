@@ -491,6 +491,13 @@ cublasStatus_t cublasDger(...) {
     return CUBLAS_STATUS_SUCCESS;
 }
 
+//**** ALTAR S
+cublasStatus_t cublasDtrmv(...) {
+    return CUBLAS_STATUS_SUCCESS;
+}
+//**** ALTAR E
+
+
 int cublasCgeru(...) {
     return 0;
 }
@@ -564,6 +571,16 @@ cublasStatus_t cublasSgemmEx(...) {
 cublasStatus_t cublasGemmEx(...) {
     return CUBLAS_STATUS_SUCCESS;
 }
+
+//**** ALTAR S
+cublasStatus_t cublasDsymm(...) {
+    return CUBLAS_STATUS_SUCCESS;
+}
+
+cublasStatus_t cublasDtrmm(...) {
+    return CUBLAS_STATUS_SUCCESS;
+}
+//**** ALTAR E
 
 cublasStatus_t cublasStrsm(...) {
     return CUBLAS_STATUS_SUCCESS;

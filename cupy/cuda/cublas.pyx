@@ -103,6 +103,12 @@ cdef extern from 'cupy_cuda.h' nogil:
         cuDoubleComplex* x, int incx, cuDoubleComplex* y, int incy,
         cuDoubleComplex* A, int lda)
 
+    int cublasDtrmv(
+        Handle handle, FillMode uplo,
+        Operation trans, DiagType diag,
+        int n, const double          *A, int lda,
+        double          *x, int incx)
+
     # BLAS Level 3
     int cublasSgemm(
         Handle handle, Operation transa, Operation transb, int m,
@@ -188,6 +194,24 @@ cdef extern from 'cupy_cuda.h' nogil:
         Handle handle, SideMode size, FillMode uplo, Operation trans,
         DiagType diag, int m, int n, const cuDoubleComplex* alpha,
         const cuDoubleComplex* A, int lda, cuDoubleComplex* B, int ldb)
+        
+    ### ALTAR S
+    int cublasDsymm(
+        Handle handle, SideMode side, FillMode uplo,
+        int m, int n,  const double* alpha,
+        const double* A, int lda,
+        const double* B, int ldb,
+        const double* beta,
+        double* C, int ldc)
+    int cublasDtrmm(
+        Handle handle, SideMode side, FillMode uplo,
+        Operation trans, DiagType diag,
+        int m, int n,
+        const double          *alpha,
+        const double          *A, int lda,
+        const double          *B, int ldb,
+        double                *C, int ldc)
+    ### ALTAR E
 
     # BLAS extension
     int cublasSgeam(
@@ -626,6 +650,18 @@ cpdef zgerc(size_t handle, int m, int n, double complex alpha, size_t x,
             <cuDoubleComplex*>A, lda)
     check_status(status)
 
+### ALTAR S
+cpdef dtrmv(size_t handle, int uplo, int trans, int diag,
+            int n, size_t A, int lda, size_t x, int incx):
+    setStream(handle, stream_module.get_current_stream_ptr())
+    with nogil:
+        status = cublasDtrmv(
+            <Handle>handle,  <FillMode>uplo, <Operation>trans, <DiagType>diag,
+            n, <double*>A, lda,
+            <double*>x, incx)
+    check_status(status)
+            
+### ALTAR E
 
 ###############################################################################
 # BLAS Level 3
@@ -873,6 +909,41 @@ cpdef ztrsm(
             <DiagType>diag, m, n, &a, <const cuDoubleComplex*>Aarray, lda,
             <cuDoubleComplex*>Barray, ldb)
     check_status(status)
+
+cpdef dsymm(size_t handle, int side, int uplo, 
+            int m, int n, double alpha, 
+            size_t Aarray, int lda,
+            size_t Barray, int ldb,
+            double beta,
+            size_t Carray, int ldc):
+    setStream(handle, stream_module.get_current_stream_ptr())
+    with nogil:
+        status = cublasDsymm(
+            <Handle>handle, <SideMode>side, <FillMode>uplo, 
+            m, n, &alpha, 
+            <const double*>Aarray, lda,
+            <const double*>Barray, ldb,
+            &beta,
+            <double*>Carray, ldc)
+    check_status(status)
+            
+cpdef dtrmm(size_t handle, int side, int uplo,
+            int trans, int diag,
+            int m, int n, double alpha,
+            size_t Aarray, int lda,
+            size_t Barray, int ldb,
+            size_t Carray, int ldc):
+    setStream(handle, stream_module.get_current_stream_ptr())
+    with nogil:
+        status = cublasDtrmm(
+            <Handle>handle, <SideMode>side, <FillMode>uplo, 
+            <Operation>trans, <DiagType>diag,
+            m, n, &alpha, 
+            <const double*>Aarray, lda,
+            <const double*>Barray, ldb,
+            <double*>Carray, ldc)
+    check_status(status)
+
 
 ###############################################################################
 # BLAS extension

@@ -135,6 +135,10 @@ cpdef zgeru(size_t handle, int m, int n, double complex alpha, size_t x,
 cpdef zgerc(size_t handle, int m, int n, double complex alpha, size_t x,
             int incx, size_t y, int incy, size_t A, int lda)
 
+### ALTAR S
+cpdef dtrmv(size_t handle, int uplo, int trans, int diag,
+            int n, size_t A, int lda, size_t x, int incx)
+### ALTAR E
 
 ###############################################################################
 # BLAS Level 3
@@ -208,6 +212,22 @@ cpdef ctrsm(size_t handle, int side, int uplo, int trans, int diag,
 cpdef ztrsm(size_t handle, int side, int uplo, int trans, int diag,
             int m, int n, double complex alpha, size_t Aarray, int lda,
             size_t Barray, int ldb)
+
+#### ALTAR S
+cpdef dsymm(size_t handle, int side, int uplo, 
+            int m, int n, double alpha, 
+            size_t Aarray, int lda,
+            size_t Barray, int ldb,
+            double beta,
+            size_t Carray, int ldc)
+cpdef dtrmm(size_t handle, int side, int uplo,
+            int trans, int diag,
+            int m, int n, double alpha,
+            size_t Aarray, int lda,
+            size_t Barray, int ldb,
+            size_t Carray, int ldc)
+#### ALTAR E
+
 
 ###############################################################################
 # BLAS extension
